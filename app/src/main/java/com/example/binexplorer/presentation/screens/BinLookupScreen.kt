@@ -20,6 +20,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -31,7 +32,7 @@ import com.example.binexplorer.presentation.navigation.ScreenRoute
 import com.example.binexplorer.presentation.states.BinLookupState
 import com.example.binexplorer.presentation.viewmodels.BinLookupViewModel
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun BinLookupScreen(
     viewModel: BinLookupViewModel = hiltViewModel(),
@@ -45,6 +46,27 @@ fun BinLookupScreen(
     val scrollState = rememberScrollState()
 
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "BIN Explorer",
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface
+                )
+            )
+        },
         bottomBar = {
             BottomNavigationBar(
                 currentRoute = ScreenRoute.SEARCH,
@@ -63,36 +85,48 @@ fun BinLookupScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-        // Заголовок приложения
-            Text(
-                text = "BIN Explorer",
-                style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(bottom = 24.dp)
-            )
-
             // Карточка с поиском
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = MaterialTheme.shapes.medium,
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant
-                )
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                ),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
                         text = "Поиск по BIN",
                         style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.padding(bottom = 12.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 12.dp),
+                        color = MaterialTheme.colorScheme.primary,
+                        textAlign = TextAlign.Center
                     )
 
-                    // Поисковая строка
-                    OutlinedTextField(
+                    TextField(
                         value = searchText,
                         onValueChange = { searchText = it },
-                        modifier = Modifier.fillMaxWidth(),
-                        label = { Text("Введите BIN карты") },
-                        placeholder = { Text("Пример: 45717360") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = MaterialTheme.colorScheme.surface,
+                                shape = MaterialTheme.shapes.small
+                            ),
+                        label = {
+                            Text(
+                                "Введите BIN карты",
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                            )
+                        },
+                        placeholder = {
+                            Text(
+                                "Пример: 45717360",
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                            )
+                        },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Number,
@@ -105,7 +139,11 @@ fun BinLookupScreen(
                             }
                         ),
                         leadingIcon = {
-                            Icon(Icons.Default.CreditCard, contentDescription = null)
+                            Icon(
+                                Icons.Default.CreditCard,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
+                            )
                         },
                         trailingIcon = {
                             IconButton(
@@ -114,13 +152,25 @@ fun BinLookupScreen(
                                     keyboardController?.hide()
                                 }
                             ) {
-                                Icon(Icons.Default.Search, "Поиск")
+                                Icon(
+                                    Icons.Default.Search,
+                                    "Поиск",
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
                             }
                         },
                         shape = MaterialTheme.shapes.small,
                         colors = TextFieldDefaults.colors(
-                            focusedContainerColor = MaterialTheme.colorScheme.surface,
-                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            focusedLabelColor = MaterialTheme.colorScheme.primary,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                            focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
                         )
                     )
                 }
@@ -128,7 +178,6 @@ fun BinLookupScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Отображение состояния с анимацией
             AnimatedContent(
                 targetState = state,
                 transitionSpec = {
@@ -165,7 +214,11 @@ fun LoadingIndicator() {
             modifier = Modifier.size(48.dp)
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Text("Поиск информации...", style = MaterialTheme.typography.bodyLarge)
+        Text(
+            "Поиск информации...",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurface
+        )
     }
 }
 
@@ -194,7 +247,8 @@ fun ErrorState(message: String, onRetry: () -> Unit) {
         Button(
             onClick = onRetry,
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             )
         ) {
             Text("Повторить")
@@ -213,20 +267,20 @@ fun PlaceholderState() {
         Icon(
             imageVector = Icons.Default.CreditCard,
             contentDescription = "Карта",
-            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+            tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
             modifier = Modifier.size(72.dp)
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "Введите BIN карты для поиска информации",
             style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
             textAlign = TextAlign.Center
         )
         Text(
             text = "BIN - первые 6 цифр на карте",
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
             textAlign = TextAlign.Center
         )
     }

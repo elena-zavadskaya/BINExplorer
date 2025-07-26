@@ -43,14 +43,14 @@ fun BinInfoCard(
             .padding(vertical = 8.dp),
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(
             modifier = Modifier.padding(24.dp)
         ) {
-            // Заголовок карточки
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -70,7 +70,6 @@ fun BinInfoCard(
             }
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Основная информация
             CardInfoSection("Карта", Icons.Default.CreditCard) {
                 InfoRow("Схема", binInfo.scheme)
                 InfoRow("Тип", binInfo.type)
@@ -134,14 +133,15 @@ fun CardInfoSection(
             Icon(
                 imageVector = icon,
                 contentDescription = title,
-                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
                 modifier = Modifier.size(20.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
             )
         }
         Divider(
@@ -174,6 +174,7 @@ fun InfoRow(
         Text(
             value ?: "Недоступно",
             style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.weight(1f)
         )
     }
