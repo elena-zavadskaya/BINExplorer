@@ -9,4 +9,5 @@
     <string name="placeholder_results">Здесь будет информация о карте</string>
     <string name="search">Поиск</string>
     <string name="history">История</string>
+    <string name="clear_history">Очистить историю</string>
 </resources>
