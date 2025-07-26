@@ -6,9 +6,11 @@ BIN Explorer - это приложение для поиска информац�
 - Очищать историю поиска
 
 ## Скриншоты приложения
-https://screenshots/main_screen.png
-https://screenshots/history_screen.png
-https://screenshots/card_info.png
+### Главный экран
+![Главный экран](docs/screenshots/home_screen.PNG)
+
+### Экран истории запросов
+![Экран истории запросов](docs/screenshots/history_screen.PNG)
 
 ## Технический стек
 - Язык: Kotlin
